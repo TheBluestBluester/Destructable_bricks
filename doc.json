@@ -1,0 +1,26 @@
+{
+  "name": "Destructable_bricks",
+  "description": "Destroys bricks n stuff",
+  "author": "Bluester16",
+  "config": {
+    "UpdateFrequency": {
+      "description": "How fast the plugin checks for projectiles. Faster updates generate more logs. Slower updates makes the plugin less consistant.",
+      "default": 200,
+      "type": "number"
+    },
+    "DetectionRange": {
+      "description": "Range of the raycaster.",
+      "default": 400,
+      "type": "number"
+    }
+  },
+  "commands": [
+    {
+      "name": "enable",
+      "description": "Enables the projectile checker.",
+      "example": "enable",
+      "args": [
+      ]
+    }
+  ]
+}
