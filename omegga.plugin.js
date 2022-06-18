@@ -77,7 +77,7 @@ class Destructable_bricks {
 	
 	
 	async raycast(pos, rot) {
-		const brs = await this.omegga.getSaveData();
+		const brs = await this.omegga.getSaveData({center: [pos.x,pos.y,pos.z], extent: [projrange,projrange,projrange]});
 		if(brs == null) {return;}
 		const yaw = Number(rot.yaw);
 		const pitch = Number(rot.pitch);
