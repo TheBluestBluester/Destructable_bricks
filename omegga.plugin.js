@@ -25,7 +25,7 @@ class Destructable_bricks {
 			this.omegga.writeln(
 				`GetAll SphereComponent RelativeLocation`
 			),
-			timeoutDelay: 90,
+			timeoutDelay: 45,
 			bundle: true
 		});
 		if(projectiles[0] == null) {return;}
@@ -60,13 +60,25 @@ class Destructable_bricks {
 			this.omegga.writeln(
 				`GetAll SphereComponent RelativeRotation Outer=${outer}`
 			),
-			timeoutDelay: 90,
+			timeoutDelay: 45,
 			bundle: true
 			});
+			// Gets BP_PlayerState_C which is used to get the player. Not required but may be usefull for minigames.
+			const projtype = outer.substr(0,outer.indexOf('C_') + 1);
+			let plstate = await this.omegga.addWatcher(new RegExp(`BP_PlayerState_C`), {
+			exec: () =>
+			this.omegga.writeln(
+				`GetAll ${projtype} InstigatorState`
+			),
+			timeoutDelay: 45,
+			bundle: true
+			});
+			let bpstate = plstate[0].input;
+			bpstate = bpstate.substr(bpstate.indexOf('PersistentLevel.BP_PlayerState_C_') + 16, 27);
 			if(projrot[0] == null) {return;}
 			pos = projectiles[0].groups;
 			rot = projrot[0].groups;
-			this.raycast(pos, rot);
+			this.raycast(pos, rot, bpstate);
 		}
 		else if(!e) {
 			e = true;
@@ -74,9 +86,7 @@ class Destructable_bricks {
 		
 	}
 	
-	
-	
-	async raycast(pos, rot) {
+	async raycast(pos, rot, playerstate) {
 		const brs = await this.omegga.getSaveData({center: [pos.x,pos.y,pos.z], extent: [projrange,projrange,projrange]});
 		if(brs == null) {return;}
 		const yaw = Number(rot.yaw);
@@ -158,6 +168,9 @@ class Destructable_bricks {
 			else {
 				this.omegga.broadcast("Checker disabled.");
 			}
+		})
+		.on('cmd:test', async name => {
+			this.test();
 		});
 		return { registeredCommands: ['enable'] };
 	}
